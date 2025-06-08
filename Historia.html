@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elige Tu Propia aventura en Generacion T - Versión Extendida</title>
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      background: linear-gradient(to bottom right, #4a90e2, #50e3c2);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(0, 0, 0, 0.75);
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 700px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.7);
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2.8rem;
+      text-shadow: 2px 2px 6px #000;
+    }
+    #escenario-img {
+      width: 100%;
+      max-height: 350px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: 0 0 15px #000;
+      transition: opacity 0.5s ease;
+    }
+    #descripcion {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      line-height: 1.6;
+      min-height: 90px;
+    }
+    .opciones {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    button.opcion-btn {
+      background-color: #1abc9c;
+      border: none;
+      padding: 15px 25px;
+      border-radius: 10px;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+      transition: background-color 0.3s ease;
+      min-width: 160px;
+    }
+    button.opcion-btn:hover {
+      background-color: #16a085;
+    }
+    button#reiniciar {
+      margin-top: 20px;
+      background-color: #e74c3c;
+      min-width: 200px;
+    }
+    button#reiniciar:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Elige Tu Propia Aventura</h1>
+    <img id="escenario-img" src="" alt="Escenario" />
+    <p id="descripcion"></p>
+    <div class="opciones" id="opciones"></div>
+    <button id="reiniciar" style="display:none;">Volver a jugar</button>
+  </div>
+
+  <script>
+    const historia = {
+      inicio: {
+        descripcion: "Estás en un bosque misterioso. Frente a ti hay tres caminos: uno oscuro y tenebroso, otro iluminado y tranquilo, y un tercero cubierto de niebla. ¿Cuál eliges?",
+        imagen: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+        opciones: [
+          { texto: "Camino oscuro", siguiente: "caminoOscuro" },
+          { texto: "Camino iluminado", siguiente: "caminoIluminado" },
+          { texto: "Camino con niebla", siguiente: "caminoNiebla" }
+        ]
+      },
+      caminoOscuro: {
+        descripcion: "El camino oscuro te lleva a una cueva. Dentro escuchas un rugido. ¿Qué haces?",
+        imagen: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80",
+        opciones: [
+          { texto: "Entrar a la cueva", siguiente: "cueva" },
+          { texto: "Dar la vuelta y correr", siguiente: "escapar" }
+        ]
+      },
+      caminoIluminado: {
+        descripcion: "El camino iluminado te lleva a un río cristalino. Hay un bote y un puente colgante. ¿Cómo cruzas?",
+        imagen: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=800&q=80",
+        opciones: [
+          { texto: "Usar el bote", siguiente: "usarBote" },
+          { texto: "Cruzar el puente", siguiente: "cruzarPuente" }
+        ]
+      },
+      caminoNiebla: {
+        descripcion: "El camino con niebla te envuelve en misterio. De repente, aparece un anciano que te ofrece tres objetos: una linterna, una espada o un mapa. ¿Cuál tomas?",
+        imagen: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
+        opciones: [
+          { texto: "Tomar la linterna", siguiente: "linterna" },
+          { texto: "Tomar la espada", siguiente: "espada" },
+          { texto: "Tomar el mapa", siguiente: "mapa" }
+        ]
+      },
+      cueva: {
+        descripcion: "Dentro de la cueva encuentras un oso dormido. ¿Intentas pasar sigilosamente o retrocedes?",
+        imagen: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80",
+        opciones: [
+          { texto: "Pasar sigilosamente", siguiente: "pasarSigilosamente" },
+          { texto: "Retroceder", siguiente: "escapar" }
+        ]
+      },
+      escapar: {
+        descripcion: "Decides que es mejor no arriesgar y corres hacia la salida del bosque. Has sobrevivido, pero la aventura termina aquí.",
+        imagen: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+        opciones: []
+      },
+      pasarSigilosamente: {
+        descripcion: "Logras pasar sin despertar al oso y encuentras un cofre con un tesoro. ¡Felicidades, ganaste!",
+        imagen: "https://images.unsplash.com/photo-1529655683826-aba9b3e77383?auto=format&fit=crop&w=800&q=80",
+        opciones: []
+      },
+      usarBote: {
+        descripcion: "El bote tiene una fuga y te hundes en el río. Fin trágico de la aventura.",
+        imagen: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=800&q=80",
+        opciones: []
+      },
+      cruzarPuente: {
+        descripcion: "Cruzas el puente con cuidado y llegas a un pueblo amistoso donde te ofrecen ayuda. Fin feliz.",
+        imagen: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=800&q=80",
+        opciones: []
+      },
+      linterna: {
+        descripcion: "Con la linterna iluminas el camino y evitas peligros. Encuentras un portal mágico que te lleva a casa. Fin feliz.",
+        imagen: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
+        opciones: []
+      },
+      espada: {
+        descripcion: "Con la espada te enfrentas a una criatura oscura y la derrotas. Eres un héroe legendario. Fin épico.",
+        imagen: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
+        opciones: []
+      },
+      mapa: {
+        descripcion: "El mapa te guía hacia un laberinto sin salida. Quedas atrapado para siempre. Fin triste.",
+        imagen: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
+        opciones: []
+      }
+    };
+
+    const imgEscenario = document.getElementById('escenario-img');
+    const descripcion = document.getElementById('descripcion');
+    const opcionesDiv = document.getElementById('opciones');
+    const btnReiniciar = document.getElementById('reiniciar');
+
+    function cargarNodo(nodoKey) {
+      const nodo = historia[nodoKey];
+      imgEscenario.style.opacity = 0;
+      setTimeout(() => {
+        imgEscenario.src = nodo.imagen;
+        imgEscenario.alt = "Escenario: " + nodoKey;
+        imgEscenario.style.opacity = 1;
+      }, 300);
+
+      descripcion.textContent = nodo.descripcion;
+      opcionesDiv.innerHTML = '';
+
+      if (nodo.opciones.length === 0) {
+        btnReiniciar.style.display = 'inline-block';
+      } else {
+        btnReiniciar.style.display = 'none';
+        nodo.opciones.forEach(opcion => {
+          const btn = document.createElement('button');
+          btn.textContent = opcion.texto;
+          btn.classList.add('opcion-btn');
+          btn.addEventListener('click', () => {
+            cargarNodo(opcion.siguiente);
+          });
+          opcionesDiv.appendChild(btn);
+        });
+      }
+    }
+
+    btnReiniciar.addEventListener('click', () => {
+      cargarNodo('inicio');
+    });
+
+    window.onload = () => {
+      cargarNodo('inicio');
+    };
+  </script>
+</body>
+</html>
